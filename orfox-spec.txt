@@ -1,0 +1,23 @@
+Orfox spec
+
+1. Background on code/project/build
+BUILD-
+- The Orfox code is currently almost the exact replica of Fennec and the build instructions can be found at https://wiki.mozilla.org/Mobile/Fennec/Android#Building_Fennec. Once successfully built, this source produces a folder named android_eclipse which is where the main Fennec Browser app code is present.
+
+2. Proposed Changes
+- The aim of Orfox is to match the specs of the tor browser bundle for the desktop. We plan on making it an almost exact replica of the desktop app in order to provide a similar user experience to people who have been using the desktop browser. This newly implemented browser would hopefully be a replacement application to the current Orweb app that we have.
+
+Match Tor Browser Desktop spec:
+- Bundling Add-ons: HTTPS Everywhere, No Script, Clean Exit
+
+Android-specific changes:
+- 
+
+3. Build/release process
+The build release cycle still has to be decided.
+
+4. Risks, Unknowns, Questions
+
+5. Positives
+- The vulnerabilities seen at http://xordern.net/ip-leakage-of-mobile-tor-browsers.html are not seen on Orfox.
+
