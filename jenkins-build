@@ -22,54 +22,13 @@ fi
 cd $WORKSPACE/tests
 ./run-tests.sh
 
+#deploy our custom mozconfig
+cp mozconfig_template external/gecko-dev/.mozconfig
 
-#------------------------------------------------------------------------------#
-# test install using site packages
-rm -rf $WORKSPACE/env
-virtualenv --system-site-packages $WORKSPACE/env
-. $WORKSPACE/env/bin/activate
-pip install -e $WORKSPACE
-
-# run tests in new pip+virtualenv install
-. $WORKSPACE/env/bin/activate
-#keysync=$WORKSPACE/env/bin/keysync $WORKSPACE/tests/run-tests.sh
-
-
-#------------------------------------------------------------------------------#
-# test install using packages from pypi
-rm -rf $WORKSPACE/env
-virtualenv --no-site-packages $WORKSPACE/env
-. $WORKSPACE/env/bin/activate
-pip install -e $WORKSPACE
-
-# run tests in new pip+virtualenv install
-. $WORKSPACE/env/bin/activate
-#keysync=$WORKSPACE/env/bin/keysync $WORKSPACE/tests/run-tests.sh
-
-
-#------------------------------------------------------------------------------#
-# run pyflakes
-
-cd $WORKSPACE
-# there are a couple warnings to work around in keysync and keysync-gui
-#pyflakes keysync keysync-gui otrapps/*.py setup.py
-#pyflakes otrapps/*.py setup.py
-
-
-#------------------------------------------------------------------------------#
-# run pylint
-
-#cd $WORKSPACE
-set +e
-# disable E1101 until there is a plugin to handle this properly:
-#   Module 'sys' has no '_MEIPASS' member
-# disable F0401 until there is a plugin to handle this properly:
-#   keysync-gui:25: [F] Unable to import 'ordereddict'
-#PYTHONPATH=$WORKSPACE/.pylint-plugins \
-#    pylint --output-format=parseable --reports=n \
-#    --disable=E1101,F0401 \
-#    --load-plugins astng_hashlib \
-#    otrapps/*.py keysync keysync-gui > $WORKSPACE/pylint.parseable
+#switch to gecko dev and build
+cd external/gecko-dev
+./mach build
+./mach package
 
 # only tell jenkins there was an error if we got ERROR or FATAL
 [ $(($? & 1)) = "1" ] && exit 1
