@@ -11,7 +11,7 @@ Match Tor Browser Desktop spec:
 - Bundling Add-ons: HTTPS Everywhere, No Script, Clean Exit
 
 Android-specific changes:
-- 
+- remove permissions for GPS, camera, microphone
 
 3. Build/release process
 The build release cycle still has to be decided.
@@ -28,6 +28,7 @@ Here are the privacy-enhancing preferences that are on by default:
 Match Tor Browser "generic" user-agent:
 
     setUserAgent("Mozilla/5.0 (Windows NT 6.1; rv:17.0) Gecko/20100101 Firefox/17.0","en-us,en;q=0.5");
+
 Turn on proxying to local Tor / Orbot proxying by default:
 
     PrefsHelper.setPref("network.proxy.type",1); //manual proxy settings
@@ -38,12 +39,20 @@ Turn on proxying to local Tor / Orbot proxying by default:
     PrefsHelper.setPref("network.proxy.socks","localhost"); //manual proxy settings
     PrefsHelper.setPref("network.proxy.socks_port",9050); //manual proxy settings
     PrefsHelper.setPref("network.proxy.socks_version",5); //manual proxy settings
+    PrefsHelper.setPref("network.proxy.socks_remote_dns",true); //make sure dns is remote
+        
+//turn off any DNS optimization outside of standard flow
+	PrefsHelper.setPref("network.dns.disablePrefetch",true);
+	PrefsHelper.setPref("network.dns.disablePrefetchFromHTTPS",true);
+
+
 Disable dish cacheing:
 
             PrefsHelper.setPref("browser.cache.disk.enable",false);
             PrefsHelper.setPref("browser.cache.memory.enable",true); 
 
             PrefsHelper.setPref("browser.cache.disk.capacity",0);
+
 Ensure data is cleared on shutdown:
 
             PrefsHelper.setPref("privacy.clearOnShutdown.cache",true);
@@ -55,23 +64,27 @@ Ensure data is cleared on shutdown:
             PrefsHelper.setPref("privacy.clearOnShutdown.passwords",true);
             PrefsHelper.setPref("privacy.clearOnShutdown.sessions",true);
             PrefsHelper.setPref("privacy.clearOnShutdown.siteSettings",true);
+
 Do Not Track!
 
             PrefsHelper.setPref("privacy.donottrackheader.enabled",false);
             PrefsHelper.setPref("privacy.donottrackheader.value",1);
+
 Disable 3rd party cookies:
-PrefsHelper.setPref("network.cookie.cookieBehavior", 1);
+	
+	    PrefsHelper.setPref("network.cookie.cookieBehavior", 1);
 
 Don't send a referrer: PrefsHelper.setPref("network.http.sendRefererHeader", 0);
 
 Make sure certificates are up-to-date:
-PrefsHelper.setPref("security.OCSP.require", true); PrefsHelper.setPref("security.checkloaduri",true);
+		PrefsHelper.setPref("security.OCSP.require", true); 
+		PrefsHelper.setPref("security.checkloaduri",true);
 
 Don't display mixed content (i.e. not secure content on a secure page)
-PrefsHelper.setPref("security.mixed_content.block_display_content", true);
+	PrefsHelper.setPref("security.mixed_content.block_display_content", true);
 
 Disable peer-to-peer WebRTC leak:
-PrefsHelper.setPref("media.peerconnection.enabled",false); //webrtc disabled
+	PrefsHelper.setPref("media.peerconnection.enabled",false); //webrtc disabled
 
 Disable ciphersuites that are not safe:
 
