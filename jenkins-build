@@ -24,11 +24,12 @@ cp mozconfig_template external/gecko-dev/.mozconfig
 cd external/gecko-dev
 ./mach build
 ./mach package
+cd ../..
 
 #------------------------------------------------------------------------------#
 # run local tests
-cd $WORKSPACE/tests
-./run-tests.sh
+#cd $WORKSPACE/tests
+#./run-tests.sh
 
 # only tell jenkins there was an error if we got ERROR or FATAL
 [ $(($? & 1)) = "1" ] && exit 1
