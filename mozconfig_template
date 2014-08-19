@@ -9,3 +9,6 @@ ac_add_options --with-android-sdk="$SDK_BASE" #Enter the android sdk location
 ac_add_options --with-ccache
 
 ac_add_options --disable-unified-compilation
+
+ac_add_options --with-branding=mobile/android/branding/orfox
+
