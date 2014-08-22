@@ -26,7 +26,7 @@ cd external/gecko-dev
 ./mach package
 cd ../..
 
-cp external/gecko-dev/obj-arm-linux-androideabi/dist/gecko.apk OrfoxFennec.apk
+cp external/gecko-dev/obj-arm-linux-androideabi/dist/gecko.apk OrfoxFennec-debug.apk
 
 
 #------------------------------------------------------------------------------#
