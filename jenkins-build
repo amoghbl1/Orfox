@@ -22,6 +22,7 @@ cp mozconfig_template external/tor-browser/.mozconfig
 
 #switch to gecko dev and build
 cd external/tor-browser
+./mach configure
 ./mach build
 ./mach package
 ./mach build-backend -b AndroidEclipse
