@@ -18,12 +18,13 @@ fi
 
 #deploy our custom mozconfig
 cd $WORKSPACE
-cp mozconfig_template external/gecko-dev/.mozconfig
+cp mozconfig_template external/tor-browser/.mozconfig
 
 #switch to gecko dev and build
-cd external/gecko-dev
+cd external/tor-browser
 ./mach build
 ./mach package
+./mach build-backend -b AndroidEclipse
 
 #------------------------------------------------------------------------------#
 # run local tests

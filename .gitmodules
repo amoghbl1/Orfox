@@ -1,3 +1,3 @@
-[submodule "external/gecko-dev"]
-	path = external/gecko-dev
-	url = https://github.com/guardianproject/gecko-dev.git
+[submodule "external/tor-browser"]
+	path = external/tor-browser
+	url = https://github.com/amoghbl1/tor-browser.git
