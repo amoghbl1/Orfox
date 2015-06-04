@@ -16,9 +16,9 @@ if [ -z $WORKSPACE ]; then
     WORKSPACE=`pwd`
 fi
 
-#deploy our custom mozconfig
+#set the mozconfig to be used
 cd $WORKSPACE
-cp mozconfig_template external/tor-browser/.mozconfig
+export MOZCONFIG="$WORKSPACE/external/tor-browser/.mozconfig-android"
 
 #switch to gecko dev and build
 cd external/tor-browser
