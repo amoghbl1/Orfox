@@ -33,28 +33,29 @@ if [ -z $ANDROID_NDK_HOME ]; then
         exit
     fi
 fi
-# reset version code/name to current date
-versionCodeDate=`date +%s`
-versionNameDate=`date +%Y-%m-%d_%H.%M.%S`
 
-sed -i \
-    -e "s,android:versionCode=\"[0-9][0-9]*\",android:versionCode=\"$versionCodeDate\"," \
-    -e "s,android:versionName=\"\([^\"][^\"]*\)\",android:versionName=\"\1.$versionNameDate\"," \
-    AndroidManifest.xml
-
-#use ndk-r8e
+# use ndk-r8e
 export NDK_BASE=$NDK_BASE"-r8e"
 
-#set the mozconfig to be used
+# set the mozconfig to be used
 cd $WORKSPACE
 export MOZCONFIG="$WORKSPACE/external/tor-browser/.mozconfig-android"
 
-#switch to gecko dev and build
+# switch to gecko dev and build
 cd external/tor-browser
 ./mach configure
 ./mach build
 ./mach package
 ./mach build-backend -b AndroidEclipse
+
+# reset version code/name to current date
+versionCodeDate=`date +%s`
+versionNameDate=`date +%Y-%m-%d_%H.%M.%S`
+
+cat $WORKSPACE/external/tor-browser/obj-tbb-*/mobile/android/base/AndroidManifest.xml | sed \
+    -e "s,android:versionCode=\"[0-9][0-9]*\",android:versionCode=\"$versionCodeDate\"," \
+    -e "s,android:versionName=\"\([^\"][^\"]*\)\",android:versionName=\"\1.$versionNameDate\"," \
+    > /dev/null
 
 #------------------------------------------------------------------------------#
 # run local tests
