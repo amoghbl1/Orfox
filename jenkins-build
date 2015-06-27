@@ -45,6 +45,11 @@ export MOZCONFIG="$WORKSPACE/external/tor-browser/.mozconfig-android"
 cd external/tor-browser
 ./mach configure
 ./mach build
+
+# Need to add in add-ons before the package step
+mkdir -p obj-tbb-*/dist/bin/distribution/extensions/
+cp -r $WORKSPACE/external/addons/* obj-tbb*/dist/bin/distribution/extensions/
+
 ./mach package
 ./mach build-backend -b AndroidEclipse
 
