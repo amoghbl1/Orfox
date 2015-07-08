@@ -47,15 +47,15 @@ cd external/tor-browser
 ./mach build
 
 # Need to add in add-ons before the package step
-mkdir -p obj-tbb-*/dist/bin/distribution/extensions/
-cp -r $WORKSPACE/external/addons/* obj-tbb*/dist/bin/distribution/extensions/
+mkdir -p obj-tbb-arm-linux-androideabi/dist/bin/distribution/extensions/
+cp -r $WORKSPACE/external/addons/* obj-tbb-arm-linux-androideabi/dist/bin/distribution/extensions/
 
 
 # reset version code/name to current date
 versionCodeDate=`date +%s`
 versionNameDate=`date +%Y-%m-%d_%H.%M.%S`
 
-cat $WORKSPACE/external/tor-browser/obj-tbb-*/mobile/android/base/AndroidManifest.xml | sed \
+cat $WORKSPACE/external/tor-browser/obj-tbb-arm-linux-androideabi/mobile/android/base/AndroidManifest.xml | sed \
     -e "s,android:versionCode=\"[0-9][0-9]*\",android:versionCode=\"$versionCodeDate\"," \
     -e "s,android:versionName=\"\([^\"][^\"]*\)\",android:versionName=\"\1.$versionNameDate\"," \
     > /dev/null
