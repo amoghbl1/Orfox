@@ -50,8 +50,6 @@ cd external/tor-browser
 mkdir -p obj-tbb-*/dist/bin/distribution/extensions/
 cp -r $WORKSPACE/external/addons/* obj-tbb*/dist/bin/distribution/extensions/
 
-./mach package
-./mach build-backend -b AndroidEclipse
 
 # reset version code/name to current date
 versionCodeDate=`date +%s`
@@ -61,6 +59,10 @@ cat $WORKSPACE/external/tor-browser/obj-tbb-*/mobile/android/base/AndroidManifes
     -e "s,android:versionCode=\"[0-9][0-9]*\",android:versionCode=\"$versionCodeDate\"," \
     -e "s,android:versionName=\"\([^\"][^\"]*\)\",android:versionName=\"\1.$versionNameDate\"," \
     > /dev/null
+
+
+./mach package
+./mach build-backend -b AndroidEclipse
 
 #------------------------------------------------------------------------------#
 # run local tests
