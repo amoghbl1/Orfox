@@ -52,7 +52,7 @@ cp -r $WORKSPACE/external/addons/* obj-tbb-arm-linux-androideabi/dist/bin/distri
 
 
 # reset version code/name to current date
-versionCodeDate=`date +%Y%m%d` #matching mozilla convention
+versionCodeDate=`date '+%s'`
 versionNameDate=`date +%Y-%m-%d_%H.%M.%S`
 
 # THIS VERSIONING CAN BE USED FOR ALPHA, ANOTHER TYPE CAN BE USED FOR BETA AND RELEASE
