@@ -1,3 +1,6 @@
 [submodule "external/tor-browser"]
 	path = external/tor-browser
 	url = https://github.com/amoghbl1/tor-browser.git
+[submodule "external/orfox-addons"]
+	path = external/orfox-addons
+	url = https://github.com/amoghbl1/orfox-addons.git
