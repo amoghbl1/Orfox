@@ -48,7 +48,7 @@ cd external/tor-browser
 
 # Need to add in add-ons before the package step
 mkdir -p obj-tbb-arm-linux-androideabi/dist/bin/distribution/extensions/
-cp -r $WORKSPACE/external/addons/* obj-tbb-arm-linux-androideabi/dist/bin/distribution/extensions/
+cp -r $WORKSPACE/external/orfox-addons/* obj-tbb-arm-linux-androideabi/dist/bin/distribution/extensions/
 
 
 # reset version code/name to current date
