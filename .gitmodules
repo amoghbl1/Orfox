@@ -4,3 +4,6 @@
 [submodule "external/orfox-addons"]
 	path = external/orfox-addons
 	url = https://github.com/amoghbl1/orfox-addons.git
+[submodule "external/NetCipher"]
+	path = external/NetCipher
+	url = https://github.com/guardianproject/NetCipher.git
