@@ -16,23 +16,60 @@ if [ -z $WORKSPACE ]; then
     WORKSPACE=`pwd`
 fi
 
-#deploy our custom mozconfig
+if [ -z $ANDROID_HOME ]; then
+    if [ -e ~/.android/bashrc ]; then
+        . ~/.android/bashrc
+    else
+        echo "ANDROID_HOME must be set!"
+        exit
+    fi
+fi
+
+if [ -z $ANDROID_NDK_HOME ]; then
+    if which ndk-build 2>&1 /dev/null; then
+        ANDROID_NDK_HOME=`which ndk-build |  sed 's,/ndk-build,,'`
+    else
+        echo "ANDROID_NDK_HOME not set and 'ndk-build' not in PATH"
+        exit
+    fi
+fi
+
+# use ndk-r8e
+export NDK_BASE=$NDK_BASE"-r8e"
+
+# set the mozconfig to be used
 cd $WORKSPACE
-cp mozconfig_template external/gecko-dev/.mozconfig
+export MOZCONFIG="$WORKSPACE/external/tor-browser/.mozconfig-android"
 
-#switch to gecko dev and build
-cd external/gecko-dev
+# switch to gecko dev and build
+cd external/tor-browser
+./mach configure
 ./mach build
+
+# Need to add in add-ons before the package step
+mkdir -p obj-tbb-arm-linux-androideabi/dist/bin/distribution/extensions/
+cp -r $WORKSPACE/external/orfox-addons/* obj-tbb-arm-linux-androideabi/dist/bin/distribution/extensions/
+
+
+# reset version code/name to current date
+versionCodeDate=`date '+%s'`
+versionNameDate=`date +%Y-%m-%d_%H.%M.%S`
+
+# THIS VERSIONING CAN BE USED FOR ALPHA, ANOTHER TYPE CAN BE USED FOR BETA AND RELEASE
+cat $WORKSPACE/external/tor-browser/obj-tbb-arm-linux-androideabi/mobile/android/base/AndroidManifest.xml | sed \
+    -e "s,android:versionCode=\"[0-9][0-9]*\",android:versionCode=\"$versionCodeDate\"," \
+    -e "s,android:versionName=\"\([^\"][^\"]*\)\",android:versionName=\"\1-esr-Orfox-0.0.1-$versionNameDate\"," \
+    > $WORKSPACE/external/tor-browser/tempManifest.xml
+mv $WORKSPACE/external/tor-browser/tempManifest.xml $WORKSPACE/external/tor-browser/obj-tbb-arm-linux-androideabi/mobile/android/base/AndroidManifest.xml
+
+
 ./mach package
-cd ../..
-
-cp external/gecko-dev/obj-arm-linux-androideabi/dist/gecko.apk OrfoxFennec-debug.apk
-
+./mach build-backend -b AndroidEclipse
 
 #------------------------------------------------------------------------------#
 # run local tests
-#cd $WORKSPACE/tests
-#./run-tests.sh
+cd $WORKSPACE/tests
+./run-tests.sh
 
 # only tell jenkins there was an error if we got ERROR or FATAL
 [ $(($? & 1)) = "1" ] && exit 1
