@@ -1,0 +1,99 @@
+#!/bin/bash
+# bash is required because we need bash's printf to guarantee a cross-platform
+# timestamp format.
+
+if [ `dirname $0` != "." ]; then
+    echo "only run this script like ./`basename $0`"
+    exit
+fi
+
+if [ -z $ANDROID_HOME ]; then
+    if [ -e ~/.android/bashrc ]; then
+        . ~/.android/bashrc
+    else
+        echo "ANDROID_HOME must be set!"
+        exit
+    fi
+fi
+
+if [ -z $ANDROID_NDK_HOME ]; then
+    if which ndk-build 2>&1 /dev/null; then
+        ANDROID_NDK_HOME=`which ndk-build |  sed 's,/ndk-build,,'`
+    else
+        echo "ANDROID_NDK_HOME not set and 'ndk-build' not in PATH"
+        exit
+    fi
+fi
+
+export NDK_BASE=${ANDROID_NDK_HOME}-r8e
+if [ ! -e $NDK_BASE ]; then
+    echo "Mozilla requires the use of Android NDK r8e only"
+    echo "This script expects it at $NDK_BASE"
+    exit 1
+fi
+
+set -e
+set -x
+
+# standardize timezone to reduce build differences
+export TZ=UTC
+# run the clock at 5% speed, ant requires a moving clock
+TIMESTAMP=`printf '@%(%Y-%m-%d %H:%M:%S)T x0.05' \
+    $(git log -n1 --format=format:%at)`
+
+
+git reset --hard
+git clean -fdx
+git submodule foreach --recursive git reset --hard
+git submodule foreach --recursive git clean -fdx
+git submodule sync --recursive
+git submodule foreach --recursive git submodule sync
+git submodule update --init --recursive
+
+# set the mozconfig to be used
+cd $WORKSPACE
+export MOZCONFIG="$WORKSPACE/external/tor-browser/.mozconfig-android"
+
+# switch to gecko dev and build
+cd external/tor-browser
+./mach configure
+./mach build
+
+# Need to add in add-ons before the package step
+mkdir -p obj-tbb-arm-linux-androideabi/dist/bin/distribution/extensions/
+cp -r $WORKSPACE/external/orfox-addons/* obj-tbb-arm-linux-androideabi/dist/bin/distribution/extensions/
+
+./mach package
+./mach build-backend -b AndroidEclipse
+
+
+# make sure we're on a signed tag that matches the version name
+versionName=`sed -n 's,.*versionName="\([^"]*\)".*,\1,p' obj-tbb-arm-linux-androideabi/mobile/android/base/AndroidManifest.xml`
+describe=`git describe --always`
+if [ $versionName != $describe ]; then
+    echo "WARNING: building $describe, which is not the latest release ($versionName)"
+else
+    # make a clearer warning above by putting this here
+    set +x
+    echo ""
+    echo ""
+    echo "Checking git tag signature for release build:"
+    git tag -v $versionName
+    echo ""
+    echo ""
+    set -x
+fi
+
+built=`ls -1 obj-tbb-*-linux-*/dist/fennec-*.apk`
+apk="Orfox-$describe.apk"
+cp $built $apk
+
+if which gpg > /dev/null; then
+    if [ -z "`gpg --list-secret-keys`" ]; then
+        echo "No GPG secret keys found, not signing APK"
+else
+        gpg --detach-sign $apk
+    fi
+else
+    echo "gpg not found, not signing APK"
+fi
