@@ -59,6 +59,7 @@ versionNameDate=`date +%Y-%m-%d_%H.%M.%S`
 cat $WORKSPACE/external/tor-browser/obj-tbb-arm-linux-androideabi/mobile/android/base/AndroidManifest.xml | sed \
     -e "s,android:versionCode=\"[0-9][0-9]*\",android:versionCode=\"$versionCodeDate\"," \
     -e "s,android:versionName=\"\([^\"][^\"]*\)\",android:versionName=\"\1-esr-Orfox-0.0.1-$versionNameDate\"," \
+    -e "s,android:debuggable=\"true\",android:debuggable=\"false\"," \
     > $WORKSPACE/external/tor-browser/tempManifest.xml
 mv $WORKSPACE/external/tor-browser/tempManifest.xml $WORKSPACE/external/tor-browser/obj-tbb-arm-linux-androideabi/mobile/android/base/AndroidManifest.xml
 
