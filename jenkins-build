@@ -46,7 +46,7 @@ export TZ=UTC
 
 # set the mozconfig to be used
 cd $WORKSPACE
-export MOZCONFIG="$WORKSPACE/external/tor-browser/.mozconfig-android"
+export MOZCONFIG="$WORKSPACE/external/tor-browser/.mozconfig-orfox"
 
 # switch to gecko dev and build
 cd external/tor-browser
