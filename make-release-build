@@ -52,7 +52,9 @@ git submodule update --init --recursive
 
 # set the mozconfig to be used
 cd $WORKSPACE
-export MOZCONFIG="$WORKSPACE/external/tor-browser/.mozconfig-orfox"
+export MOZCONFIG="$WORKSPACE/external/tor-browser/.mozconfig-orfox-release"
+cp $WORKSPACE/.mozconfig-orfox-release $MOZCONFIG
+cat $WORKSPACE/external/tor-browser/.mozconfig-orfox >> $MOZCONFIG
 
 # switch to gecko dev and build
 cd external/tor-browser
