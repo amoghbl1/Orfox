@@ -51,7 +51,7 @@ git submodule foreach --recursive git submodule sync
 git submodule update --init --recursive
 
 # set the mozconfig to be used
-export MOZCONFIG="external/tor-browser/.mozconfig-orfox-release"
+export MOZCONFIG=`pwd`"/external/tor-browser/.mozconfig-orfox-release"
 cp .mozconfig-orfox-release $MOZCONFIG
 cat external/tor-browser/.mozconfig-orfox >> $MOZCONFIG
 
