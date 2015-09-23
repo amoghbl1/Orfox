@@ -51,10 +51,9 @@ git submodule foreach --recursive git submodule sync
 git submodule update --init --recursive
 
 # set the mozconfig to be used
-cd $WORKSPACE
-export MOZCONFIG="$WORKSPACE/external/tor-browser/.mozconfig-orfox-release"
-cp $WORKSPACE/.mozconfig-orfox-release $MOZCONFIG
-cat $WORKSPACE/external/tor-browser/.mozconfig-orfox >> $MOZCONFIG
+export MOZCONFIG="external/tor-browser/.mozconfig-orfox-release"
+cp .mozconfig-orfox-release $MOZCONFIG
+cat external/tor-browser/.mozconfig-orfox >> $MOZCONFIG
 
 # switch to gecko dev and build
 cd external/tor-browser
@@ -63,7 +62,7 @@ cd external/tor-browser
 
 # Need to add in add-ons before the package step
 mkdir -p obj-tbb-arm-linux-androideabi/dist/bin/distribution/extensions/
-cp -r $WORKSPACE/external/orfox-addons/* obj-tbb-arm-linux-androideabi/dist/bin/distribution/extensions/
+cp -r external/orfox-addons/* obj-tbb-arm-linux-androideabi/dist/bin/distribution/extensions/
 
 # set the version, the official Mozilla so far has been too hard to figure out...
 export versionName="Fennec-38.1.0esr/TorBrowser-5.0/Orfox-1.0beta1"
