@@ -62,7 +62,7 @@ cd external/tor-browser
 
 # Need to add in add-ons before the package step
 mkdir -p obj-tbb-arm-linux-androideabi/dist/bin/distribution/extensions/
-cp -r external/orfox-addons/* obj-tbb-arm-linux-androideabi/dist/bin/distribution/extensions/
+cp -r ../orfox-addons/* obj-tbb-arm-linux-androideabi/dist/bin/distribution/extensions/
 
 # set the version, the official Mozilla so far has been too hard to figure out...
 export versionName="Fennec-38.1.0esr/TorBrowser-5.0/Orfox-1.0beta1"
