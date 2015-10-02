@@ -4,13 +4,10 @@
 # sure to always run it in its dir, i.e. ./run-tests.sh, otherwise it might
 # remove things that you don't want it to.
 
-#if [ `dirname $0` != "." ]; then
-#    echo "only run this script like ./`basename $0`"
-#    exit
-#fi
-
-set -e
-set -x
+if [ `dirname $0` != "." ]; then
+    echo "only run this script like ./`basename $0`"
+    exit
+fi
 
 if [ -z $WORKSPACE ]; then
     WORKSPACE=`pwd`
@@ -34,12 +31,22 @@ if [ -z $ANDROID_NDK_HOME ]; then
     fi
 fi
 
-# use ndk-r8e
-export NDK_BASE=$NDK_BASE"-r8e"
+export NDK_BASE=${ANDROID_NDK_HOME}-r8e
+if [ ! -e $NDK_BASE ]; then
+    echo "Mozilla requires the use of Android NDK r8e only"
+    echo "This script expects it at $NDK_BASE"
+    exit 1
+fi
+
+set -e
+set -x
+
+# standardize timezone to reduce build differences
+export TZ=UTC
 
 # set the mozconfig to be used
 cd $WORKSPACE
-export MOZCONFIG="$WORKSPACE/external/tor-browser/.mozconfig-android"
+export MOZCONFIG="$WORKSPACE/external/tor-browser/.mozconfig-orfox"
 
 # switch to gecko dev and build
 cd external/tor-browser
@@ -71,8 +78,3 @@ mv $WORKSPACE/external/tor-browser/tempManifest.xml $WORKSPACE/external/tor-brow
 # run local tests
 cd $WORKSPACE/tests
 ./run-tests.sh
-
-# only tell jenkins there was an error if we got ERROR or FATAL
-[ $(($? & 1)) = "1" ] && exit 1
-[ $(($? & 2)) = "2" ] && exit 2
-set -e

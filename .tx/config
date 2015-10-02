@@ -1,0 +1,8 @@
+[main]
+host = https://www.transifex.com
+
+[orfox.description]
+file_filter = description/<lang>.xlf
+host = https://www.transifex.com
+source_file = description/source.xlf
+source_lang = en_US
