@@ -26,7 +26,7 @@ if [ -z $ANDROID_NDK_HOME ]; then
 fi
 
 export NDK_BASE=${ANDROID_NDK_HOME}
-export NDK_BASE=${ANDROID_SDK_HOME}
+export SDK_BASE=${ANDROID_SDK_HOME}
 
 set -e
 set -x
