@@ -25,12 +25,8 @@ if [ -z $ANDROID_NDK_HOME ]; then
     fi
 fi
 
-export NDK_BASE=${ANDROID_NDK_HOME}-r8e
-if [ ! -e $NDK_BASE ]; then
-    echo "Mozilla requires the use of Android NDK r8e only"
-    echo "This script expects it at $NDK_BASE"
-    exit 1
-fi
+export NDK_BASE=${ANDROID_NDK_HOME}
+export NDK_BASE=${ANDROID_SDK_HOME}
 
 set -e
 set -x
